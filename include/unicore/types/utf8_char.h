@@ -120,59 +120,12 @@ private:
     }
   }
 
-
 private:
   CodepointType codepoint_{};
 };
 
-using U8Char = UnicodeChar<Utf8Char>;
+using Char = UnicodeChar<Utf8Char>;
 
 }  // namespace unicore
-
-static unicore::U8Char ReadU8Char(std::istream& is) {
-  if (!is.good()) {
-    return {};
-  }
-  char buffer[4] = {};
-  is.read(buffer, 1);
-
-  size_t length = 0;
-  if ((buffer[0] & 0x80) == 0) {
-    length = 1;
-  } else if ((buffer[0] & 0xE0) == 0xC0) {
-    length = 2;
-  } else if ((buffer[0] & 0xF0) == 0xE0) {
-    length = 3;
-  } else if ((buffer[0] & 0xF8) == 0xF0) {
-    length = 4;
-  }
-  if (length > 1) {
-    is.read(buffer + 1, static_cast<std::streamsize>(length - 1));
-  }
-  return buffer;
-}
-
-static bool operator==(const unicore::U8Char lhs, const unicore::U8Char rhs) {
-  const auto is_equal = lhs.GetCodepoint() == rhs.GetCodepoint();
-  return is_equal;
-}
-
-static bool operator!=(const unicore::U8Char lhs, const unicore::U8Char rhs) {
-  return !(lhs == rhs);
-}
-
-static std::istream& operator>>(std::istream& is, unicore::U8Char& c) {
-  if (is.good()) {
-    c = ReadU8Char(is);
-  }
-  return is;
-}
-
-static std::ostream& operator<<(std::ostream& os, const unicore::U8Char& c) {
-  if (os.good()) {
-    os.write(c.ToBytes().c_str(), static_cast<std::streamsize>(c.ByteCount()));
-  }
-  return os;
-}
 
 #endif  // UNICORE_TYPES_UTF8_CHAR_H_
