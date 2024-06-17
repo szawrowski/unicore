@@ -56,10 +56,21 @@ void Func() {
   }
   std::cout << std::endl;
 
-  const unicore::U8Char emoji = "😄";
+  const unicore::Char emoji = "😄";
 
   std::cout << "Symbol: " << emoji << " (codepoint: " << std::hex
             << emoji.GetCodepoint() << std::dec << ')' << std::endl;
+
+  const unicore::String first_line = "First line 😄";
+  const unicore::String second_line = "Second line 😄";
+
+  const auto file = unicore::File{"file.txt"};
+  file.Clear();
+  file.WriteLine(first_line);
+  file.Append(second_line);
+
+  const auto input = file.Read();
+  std::cout << input << std::endl;
 }
 
 TEST(UnicoreTest, Sample) {
