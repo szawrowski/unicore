@@ -4,32 +4,62 @@
 
 #include "unicore/unicore.h"
 
+template <typename StringType>
+static void PrintHex(StringType str) {
+  for (auto ch : str) {
+    PrintHexValue(ch);
+    std::cout << ' ';
+  }
+  std::cout << std::endl;
+}
+
+template <typename CharType>
+static void PrintHexValue(CharType ch) {
+  std::cout << std::hex << std::uppercase << std::setw(sizeof(CharType) * 2)
+            << std::setfill('0');
+  if (sizeof(CharType) == 1) {
+    std::cout << static_cast<int>(ch);
+  } else if (sizeof(CharType) == 2) {
+    std::cout << reinterpret_cast<const uint16_t&>(ch);
+  } else if (sizeof(CharType) == 4) {
+    std::cout << reinterpret_cast<const uint32_t&>(ch);
+  }
+}
+
 void Func() {
-  const auto hello_world = UString("你好，世界！");
+  unicore::String hello_world = "Hello, 世界! 😄";
 
-  std::cout << "String: " << hello_world << std::endl
-            << "char count: " << hello_world.CharCount() << ", "
-            << "byte count: " << hello_world.ByteCount() << std::endl;
+  std::cout << "String: " << hello_world << " (char count: "
+            << hello_world.CharCount() << ", " << "byte count: "
+            << hello_world.ByteCount() << ')' << std::endl;
 
-  std::wcout << L"UTF-16: ";
-  for (const char16_t& ch : hello_world.ToU16String()) {
-    std::wcout << std::hex << ch << L' ';
+  std::cout << "UTF-16: ";
+  PrintHex(hello_world.ToU16String());
+
+  std::cout << "UTF-32: ";
+  PrintHex(hello_world.ToU32String());
+
+  std::cout << "Chars: ";
+  for (const auto& c : hello_world) {
+    std::cout << '\'' << c << "' ";
   }
-  std::wcout << std::dec << std::endl;
+  std::cout << std::endl;
 
-  std::wcout << L"UTF-32: ";
-  for (const char32_t& ch : hello_world.ToU32String()) {
-    std::wcout << std::hex << ch << L' ';
+  for (auto& c : hello_world) {
+    if (c == "H") {
+      c = "世";
+    }
   }
-  std::wcout << std::dec << std::endl;
+  std::cout << "Modified chars: ";
+  for (const auto& c : hello_world) {
+    std::cout << '\'' << c << "' ";
+  }
+  std::cout << std::endl;
 
-  std::cout << "Random string: " << UString("随机词序") << std::endl;
+  const unicore::U8Char emoji = "😄";
 
-  const auto symbol = UChar("\u2728");
-
-  std::cout << "Symbol: " << symbol << std::endl
-            << "codepoint: " << std::hex << symbol.GetCodepoint() << std::dec
-            << std::endl;
+  std::cout << "Symbol: " << emoji << " (codepoint: " << std::hex
+            << emoji.GetCodepoint() << std::dec << ')' << std::endl;
 }
 
 TEST(UnicoreTest, Sample) {
