@@ -17,15 +17,15 @@
 namespace unicore {
 
 template <>
-class UnicodeString<U8Char> {
+class UnicodeString<Char> {
 public:
-  using CharType = U8Char;
-  using BasicCharType = U8Char::CharType;
+  using CharType = Char;
+  using BasicCharType = Char::CharType;
   using StringType = std::basic_string<BasicCharType>;
   using OutputStringStreamType = std::basic_ostringstream<BasicCharType>;
   using SizeType = size_t;
-  using Iterator = UnicodeStringIterator<U8Char>;
-  using ConstIterator = UnicodeStringConstIterator<U8Char>;
+  using Iterator = UnicodeStringIterator<Char>;
+  using ConstIterator = UnicodeStringConstIterator<Char>;
 
 public:
   UnicodeString() = default;
@@ -34,12 +34,9 @@ public:
 
   UnicodeString(const BasicCharType* str) { FromBytes(StringType{str}); }
 
-  template <typename Container>
-  UnicodeString(const Container& container)
-      : data_(container.begin(), container.end()) {}
+  UnicodeString(const UnicodeString& other) : data_{other.data_} {}
 
-  template <typename Iterator>
-  UnicodeString(Iterator first, Iterator last) : data_(first, last) {}
+  UnicodeString(UnicodeString&& other) : data_{std::move(other.data_)} {}
 
 public:
   UnicodeString& operator=(const StringType& str) {
@@ -52,6 +49,13 @@ public:
     return *this;
   }
 
+  UnicodeString& operator=(const UnicodeString& other) = default;
+
+  UnicodeString& operator=(UnicodeString&& other)  noexcept {
+    this->data_ = std::move(other.data_);
+    return *this;
+  }
+
 public:
   void Append(const CharType& value) { data_.push_back(value); }
 
@@ -59,7 +63,7 @@ public:
     data_.insert(data_.end(), other.data_.begin(), other.data_.end());
   }
 
-  [[nodiscard]] StringType ToBytes() const {
+  [[nodiscard]] StringType ToStdString() const {
     OutputStringStreamType oss;
     for (const auto& c : data_) {
       oss << c.ToBytes();
@@ -144,50 +148,18 @@ private:
       if (pos >= size) {
         break;
       }
-      U8Char temp = str.substr(pos).c_str();
+      Char temp = str.substr(pos).c_str();
       data_.push_back(temp);
       pos += temp.ByteCount();
     }
   }
 
 private:
-  std::vector<U8Char> data_;
+  std::vector<Char> data_;
 };
 
-using String = UnicodeString<U8Char>;
+using String = UnicodeString<Char>;
 
 }  // namespace unicore
-
-static bool operator==(const unicore::String& lhs, const unicore::String& rhs) {
-  for (auto lhs_it = lhs.begin(), lhs_end = lhs.end(), rhs_it = rhs.begin(),
-            rhs_end = rhs.end();
-       lhs_it != lhs_end && rhs_it != rhs_end; ++lhs_it, ++rhs_it) {
-    if (*lhs_it != *rhs_it) {
-      return {};
-    }
-  }
-  return true;
-}
-
-static bool operator!=(const unicore::String& lhs, const unicore::String& rhs) {
-  return !(lhs == rhs);
-}
-
-static std::istream& operator>>(std::istream& is, unicore::String& str) {
-  if (is.good()) {
-    std::string input;
-    std::getline(is, input);
-    str = input;
-  }
-  return is;
-}
-
-static std::ostream& operator<<(std::ostream& os, const unicore::String& str) {
-  if (os.good()) {
-    os.write(str.ToBytes().c_str(),
-             static_cast<std::streamsize>(str.ByteCount()));
-  }
-  return os;
-}
 
 #endif  // UNICORE_TYPES_UTF8_STRING_H_
