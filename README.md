@@ -6,7 +6,7 @@
 
 int main() {
   unicore::String str = "Hello, 世界!";
-  unicore::U8Char emoji = "🙂";
+  unicore::Char emoji = "🙂";
   std::cout << str << ' ' << emoji << std::endl;
   return 0;
 }
