@@ -6,13 +6,13 @@
 #ifndef UNICORE_TYPES_UTF8_FILE_H_
 #define UNICORE_TYPES_UTF8_FILE_H_
 
+#include <filesystem>
 #include <fstream>
 #include <utility>
-#include <filesystem>
 
-#include "unicore/types/unicode_file.h"
-#include "unicore/types/utf8_string.h"
-#include "unicore/operators/utf8_string_stream_operator.h"
+#include "unicore/operators/string_stream_operator.h"
+#include "unicore/types/file/unicode_file.h"
+#include "unicore/types/string/utf8_string.h"
 
 namespace unicore {
 
@@ -21,16 +21,17 @@ class UnicodeFile<Char> {
 public:
   using CharType = Char::CharType;
   using StringType = std::basic_string<CharType>;
-  using OutputStringStream = std::basic_ostringstream<CharType>;
   using InputFileStream = std::basic_ifstream<CharType>;
   using OutputFileStream = std::basic_ofstream<CharType>;
+  using OutputStringStream = std::basic_ostringstream<CharType>;
 
 public:
   UnicodeFile(const String& filename) : filename_{filename} {}
 
   UnicodeFile(const UnicodeFile& other) : filename_{other.filename_} {}
 
-  UnicodeFile(UnicodeFile&& other) noexcept : filename_{std::move(other.filename_)} {}
+  UnicodeFile(UnicodeFile&& other) noexcept
+      : filename_{std::move(other.filename_)} {}
 
 public:
   UnicodeFile& operator=(const UnicodeFile& other) {
@@ -115,8 +116,8 @@ public:
   }
 
   void Clear() const {
-    const OutputFileStream file(GetFilename(),
-                          std::ios::out | std::ios::trunc | std::ios::binary);
+    const OutputFileStream file(
+        GetFilename(), std::ios::out | std::ios::trunc | std::ios::binary);
     if (!file) {
       throw std::ios_base::failure("Failed to open file for clearing");
     }
