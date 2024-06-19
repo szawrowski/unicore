@@ -4,6 +4,17 @@
 
 #include "unicore/unicore.h"
 
+template <typename CharType>
+static void PrintHexValue(CharType ch) {
+  std::cout << std::hex << std::uppercase << std::setw(sizeof(CharType) * 2)
+            << std::setfill('0');
+  if (sizeof(CharType) == 2) {
+    std::cout << reinterpret_cast<const uint16_t&>(ch);
+  } else if (sizeof(CharType) == 4) {
+    std::cout << reinterpret_cast<const uint32_t&>(ch);
+  }
+}
+
 template <typename StringType>
 static void PrintHex(StringType str) {
   for (auto ch : str) {
@@ -11,19 +22,6 @@ static void PrintHex(StringType str) {
     std::cout << ' ';
   }
   std::cout << std::endl;
-}
-
-template <typename CharType>
-static void PrintHexValue(CharType ch) {
-  std::cout << std::hex << std::uppercase << std::setw(sizeof(CharType) * 2)
-            << std::setfill('0');
-  if (sizeof(CharType) == 1) {
-    std::cout << static_cast<int>(ch);
-  } else if (sizeof(CharType) == 2) {
-    std::cout << reinterpret_cast<const uint16_t&>(ch);
-  } else if (sizeof(CharType) == 4) {
-    std::cout << reinterpret_cast<const uint32_t&>(ch);
-  }
 }
 
 void Func() {
@@ -71,6 +69,22 @@ void Func() {
 
   const auto input = file.Read();
   std::cout << input << std::endl;
+
+  // ---------------------------------------------------------------------------
+
+  unicore::U16String str16 = u"Hello, 世界! 😄";
+  std::cout << "Hex: ";
+  PrintHex(str16.ToU16String());
+  std::cout << "Converted from UTF-16 string: " << str16.ToStdString() << std::endl;
+
+  // ---------------------------------------------------------------------------
+
+  unicore::U32String str32 = U"Hello, 世界! 😄";
+  std::cout << "Hex: ";
+  PrintHex(str32.ToU32String());
+  std::cout << "Converted from UTF-32 string: " << str32.ToStdString()  << std::endl;
+
+  std::cout << "Write char: " << unicore::U32Char{U"😄"} << std::endl;
 }
 
 TEST(UnicoreTest, Sample) {
