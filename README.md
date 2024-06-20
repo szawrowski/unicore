@@ -1,12 +1,12 @@
-# unicore
+# uni
 
 ### Usage
 ```c++
-#include <unicore/unicore.h>
+#include <uni/uni.h>
 
 int main() {
-  unicore::String str = "Hello, 世界!";
-  unicore::Char emoji = "🙂";
+  uni::String str = "Hello, 世界!";
+  uni::Char emoji = "🙂";
   std::cout << str << ' ' << emoji << std::endl;
   return 0;
 }
