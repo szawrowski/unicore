@@ -6,11 +6,11 @@
 #ifndef UNICORE_TYPES_UNICODE_CHAR_H_
 #define UNICORE_TYPES_UNICODE_CHAR_H_
 
-namespace unicore {
+namespace uni {
 
 template <typename CharType>
 class UnicodeChar;
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_TYPES_UNICODE_CHAR_H_

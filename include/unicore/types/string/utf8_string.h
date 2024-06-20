@@ -15,7 +15,7 @@
 #include "unicore/types/string/unicode_string.h"
 #include "unicore/utility/string_converter.h"
 
-namespace unicore {
+namespace uni {
 
 template <>
 class UnicodeString<Char> {
@@ -160,6 +160,6 @@ private:
 
 using String = UnicodeString<Char>;
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_TYPES_UTF8_STRING_H_

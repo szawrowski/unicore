@@ -10,8 +10,8 @@
 #include "unicore/types/string/utf32_string.h"
 #include "unicore/types/string/utf8_string.h"
 
-static std::basic_istream<unicore::Utf8Char>& operator>>(
-    std::basic_istream<unicore::Utf8Char>& is, unicore::String& str) {
+static std::basic_istream<uni::Utf8Char>& operator>>(
+    std::basic_istream<uni::Utf8Char>& is, uni::String& str) {
   if (is.good()) {
     std::string input;
     std::getline(is, input);
@@ -20,8 +20,8 @@ static std::basic_istream<unicore::Utf8Char>& operator>>(
   return is;
 }
 
-static std::basic_ostream<unicore::Utf8Char>& operator<<(
-    std::basic_ostream<unicore::Utf8Char>& os, const unicore::String& str) {
+static std::basic_ostream<uni::Utf8Char>& operator<<(
+    std::basic_ostream<uni::Utf8Char>& os, const uni::String& str) {
   if (os.good()) {
     os.write(str.ToStdString().c_str(),
              static_cast<std::streamsize>(str.ByteCount()));
@@ -29,8 +29,8 @@ static std::basic_ostream<unicore::Utf8Char>& operator<<(
   return os;
 }
 
-static std::basic_istream<unicore::Utf16Char>& operator>>(
-    std::basic_istream<unicore::Utf16Char>& is, unicore::U16String& str) {
+static std::basic_istream<uni::Utf16Char>& operator>>(
+    std::basic_istream<uni::Utf16Char>& is, uni::U16String& str) {
   if (is.good()) {
     std::u16string input;
     std::getline(is, input);
@@ -39,8 +39,8 @@ static std::basic_istream<unicore::Utf16Char>& operator>>(
   return is;
 }
 
-static std::basic_ostream<unicore::Utf8Char>& operator<<(
-    std::basic_ostream<unicore::Utf8Char>& os, const unicore::U16String& str) {
+static std::basic_ostream<uni::Utf8Char>& operator<<(
+    std::basic_ostream<uni::Utf8Char>& os, const uni::U16String& str) {
   if (os.good()) {
     os.write(str.ToStdString().c_str(),
              static_cast<std::streamsize>(str.ByteCount()));
@@ -48,8 +48,8 @@ static std::basic_ostream<unicore::Utf8Char>& operator<<(
   return os;
 }
 
-static std::basic_istream<unicore::Utf32Char>& operator>>(
-    std::basic_istream<unicore::Utf32Char>& is, unicore::U32String& str) {
+static std::basic_istream<uni::Utf32Char>& operator>>(
+    std::basic_istream<uni::Utf32Char>& is, uni::U32String& str) {
   if (is.good()) {
     std::u32string input;
     std::getline(is, input);
@@ -58,8 +58,8 @@ static std::basic_istream<unicore::Utf32Char>& operator>>(
   return is;
 }
 
-static std::basic_ostream<unicore::Utf8Char>& operator<<(
-    std::basic_ostream<unicore::Utf8Char>& os, const unicore::U32String& str) {
+static std::basic_ostream<uni::Utf8Char>& operator<<(
+    std::basic_ostream<uni::Utf8Char>& os, const uni::U32String& str) {
   if (os.good()) {
     os.write(str.ToStdString().c_str(),
              static_cast<std::streamsize>(str.ByteCount()));

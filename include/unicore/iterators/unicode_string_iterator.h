@@ -9,7 +9,7 @@
 #include <iterator>
 #include <vector>
 
-namespace unicore {
+namespace uni {
 
 template <typename CharType>
 class UnicodeStringIterator {
@@ -78,6 +78,6 @@ private:
   typename std::vector<CharType>::iterator it_;
 };
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_ITERATORS_UNICODE_STRING_ITERATOR_H_

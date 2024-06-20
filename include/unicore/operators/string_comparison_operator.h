@@ -11,7 +11,7 @@
 #include "unicore/types/string/utf32_string.h"
 #include "unicore/types/string/utf8_string.h"
 
-static bool operator==(const unicore::String& lhs, const unicore::String& rhs) {
+static bool operator==(const uni::String& lhs, const uni::String& rhs) {
   for (auto lhs_it = lhs.begin(), lhs_end = lhs.end(), rhs_it = rhs.begin(),
             rhs_end = rhs.end();
        lhs_it != lhs_end && rhs_it != rhs_end; ++lhs_it, ++rhs_it) {
@@ -22,12 +22,12 @@ static bool operator==(const unicore::String& lhs, const unicore::String& rhs) {
   return true;
 }
 
-static bool operator!=(const unicore::String& lhs, const unicore::String& rhs) {
+static bool operator!=(const uni::String& lhs, const uni::String& rhs) {
   return !(lhs == rhs);
 }
 
-static bool operator==(const unicore::U16String& lhs,
-                       const unicore::U16String& rhs) {
+static bool operator==(const uni::U16String& lhs,
+                       const uni::U16String& rhs) {
   for (auto lhs_it = lhs.begin(), lhs_end = lhs.end(), rhs_it = rhs.begin(),
             rhs_end = rhs.end();
        lhs_it != lhs_end && rhs_it != rhs_end; ++lhs_it, ++rhs_it) {
@@ -38,13 +38,13 @@ static bool operator==(const unicore::U16String& lhs,
   return true;
 }
 
-static bool operator!=(const unicore::U16String& lhs,
-                       const unicore::U16String& rhs) {
+static bool operator!=(const uni::U16String& lhs,
+                       const uni::U16String& rhs) {
   return !(lhs == rhs);
 }
 
-static bool operator==(const unicore::U32String& lhs,
-                       const unicore::U32String& rhs) {
+static bool operator==(const uni::U32String& lhs,
+                       const uni::U32String& rhs) {
   for (auto lhs_it = lhs.begin(), lhs_end = lhs.end(), rhs_it = rhs.begin(),
             rhs_end = rhs.end();
        lhs_it != lhs_end && rhs_it != rhs_end; ++lhs_it, ++rhs_it) {
@@ -55,8 +55,8 @@ static bool operator==(const unicore::U32String& lhs,
   return true;
 }
 
-static bool operator!=(const unicore::U32String& lhs,
-                       const unicore::U32String& rhs) {
+static bool operator!=(const uni::U32String& lhs,
+                       const uni::U32String& rhs) {
   return !(lhs == rhs);
 }
 

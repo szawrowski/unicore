@@ -15,7 +15,7 @@
 #include "unicore/types/char/unicode_char.h"
 #include "unicore/utility/length_calculation.h"
 
-namespace unicore {
+namespace uni {
 
 template <>
 class UnicodeChar<Utf8Char> {
@@ -86,6 +86,6 @@ private:
 
 using Char = UnicodeChar<Utf8Char>;
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_TYPES_UTF8_CHAR_H_

@@ -6,12 +6,12 @@
 #ifndef UNICORE_TYPES_BASIC_CHAR_H_
 #define UNICORE_TYPES_BASIC_CHAR_H_
 
-namespace unicore {
+namespace uni {
 
 using Utf8Char = char;
 using Utf16Char = char16_t;
 using Utf32Char = char32_t;
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_TYPES_BASIC_CHAR_H_

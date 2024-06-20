@@ -25,7 +25,7 @@ static void PrintHex(StringType str) {
 }
 
 void Func() {
-  unicore::String hello_world = "Hello, 世界! 😄";
+  uni::String hello_world = "Hello, 世界! 😄";
 
   std::cout << "String: " << hello_world << " (char count: "
             << hello_world.CharCount() << ", " << "byte count: "
@@ -54,15 +54,15 @@ void Func() {
   }
   std::cout << std::endl;
 
-  const unicore::Char emoji = "😄";
+  const uni::Char emoji = "😄";
 
   std::cout << "Symbol: " << emoji << " (codepoint: " << std::hex
             << emoji.GetCodepoint() << std::dec << ')' << std::endl;
 
-  const unicore::String first_line = "First line 😄";
-  const unicore::String second_line = "Second line 😄";
+  const uni::String first_line = "First line 😄";
+  const uni::String second_line = "Second line 😄";
 
-  const auto file = unicore::File{"file.txt"};
+  const auto file = uni::File{"file.txt"};
   file.Clear();
   file.WriteLine(first_line);
   file.Append(second_line);
@@ -72,19 +72,19 @@ void Func() {
 
   // ---------------------------------------------------------------------------
 
-  unicore::U16String str16 = u"Hello, 世界! 😄";
+  uni::U16String str16 = u"Hello, 世界! 😄";
   std::cout << "Hex: ";
   PrintHex(str16.ToU16String());
   std::cout << "Converted from UTF-16 string: " << str16.ToStdString() << std::endl;
 
   // ---------------------------------------------------------------------------
 
-  unicore::U32String str32 = U"Hello, 世界! 😄";
+  uni::U32String str32 = U"Hello, 世界! 😄";
   std::cout << "Hex: ";
   PrintHex(str32.ToU32String());
   std::cout << "Converted from UTF-32 string: " << str32.ToStdString()  << std::endl;
 
-  std::cout << "Write char: " << unicore::U32Char{U"😄"} << std::endl;
+  std::cout << "Write char: " << uni::U32Char{U"😄"} << std::endl;
 }
 
 TEST(UnicoreTest, Sample) {

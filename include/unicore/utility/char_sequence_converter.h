@@ -10,7 +10,7 @@
 
 #include "unicore/types/char/basic_char.h"
 
-namespace unicore {
+namespace uni {
 
 using StdCharSequence = std::tuple<Utf8Char, Utf8Char, Utf8Char, Utf8Char>;
 using StdU16CharSequence = std::tuple<Utf16Char, Utf16Char>;
@@ -52,6 +52,6 @@ static StdU16CharSequence GetStdU16CharSequence(const uint32_t codepoint) {
 
 static Utf32Char GetStdU32Char(const uint32_t codepoint) { return codepoint; }
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_UTILITY_CHAR_SEQUENCE_CONVERTER_H_

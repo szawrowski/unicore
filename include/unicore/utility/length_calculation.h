@@ -11,7 +11,7 @@
 
 #include "unicore/types/char/basic_char.h"
 
-namespace unicore {
+namespace uni {
 
 template <typename CharType>
 size_t CalculateSequenceLength(uint32_t codepoint);
@@ -38,6 +38,6 @@ size_t CalculateSequenceLength<Utf16Char>(const uint32_t codepoint) {
   return 2;
 }
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_UTILITY_LENGTH_CALCULATION_H_

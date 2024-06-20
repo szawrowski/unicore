@@ -10,7 +10,7 @@
 
 #include "unicore/utility/char_sequence_converter.h"
 
-namespace unicore {
+namespace uni {
 
 [[nodiscard]] std::basic_string<Utf8Char> ConvertToStdString(
     const uint32_t codepoint) {
@@ -45,6 +45,6 @@ namespace unicore {
   return std::basic_string<Utf32Char>{static_cast<Utf32Char>(codepoint)};
 }
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_UTILITY_STRING_CONVERTER_H_

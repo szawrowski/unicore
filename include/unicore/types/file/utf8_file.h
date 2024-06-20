@@ -14,7 +14,7 @@
 #include "unicore/types/file/unicode_file.h"
 #include "unicore/types/string/utf8_string.h"
 
-namespace unicore {
+namespace uni {
 
 template <>
 class UnicodeFile<Char> {
@@ -134,6 +134,6 @@ private:
 
 using File = UnicodeFile<Char>;
 
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_TYPES_UTF8_FILE_H_

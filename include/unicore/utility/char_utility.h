@@ -12,10 +12,10 @@
 #include "unicore/types/char/utf32_char.h"
 #include "unicore/types/char/utf8_char.h"
 
-namespace unicore {
+namespace uni {
 namespace impl {
 
-static Char ReadU8Char(std::basic_istream<unicore::Utf8Char>& is) {
+static Char ReadU8Char(std::basic_istream<uni::Utf8Char>& is) {
   if (!is.good()) {
     return {};
   }
@@ -41,7 +41,7 @@ static Char ReadU8Char(std::basic_istream<unicore::Utf8Char>& is) {
   return buffer;
 }
 
-static U16Char ReadU16Char(std::basic_istream<unicore::Utf16Char>& is) {
+static U16Char ReadU16Char(std::basic_istream<uni::Utf16Char>& is) {
   if (!is.good()) {
     return {};
   }
@@ -62,7 +62,7 @@ static U16Char ReadU16Char(std::basic_istream<unicore::Utf16Char>& is) {
   }
 }
 
-static U32Char ReadU32Char(std::basic_istream<unicore::Utf32Char>& is) {
+static U32Char ReadU32Char(std::basic_istream<uni::Utf32Char>& is) {
   if (!is.good()) {
     return {};
   }
@@ -73,6 +73,6 @@ static U32Char ReadU32Char(std::basic_istream<unicore::Utf32Char>& is) {
 }
 
 }  // namespace impl
-}  // namespace unicore
+}  // namespace uni
 
 #endif  // UNICORE_UTILITY_CHAR_UTILITY_H_
