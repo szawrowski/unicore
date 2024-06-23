@@ -9,15 +9,16 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "unicore/types/char/basic_char.h"
+#include "unicore/defs/basic_char.h"
 
 namespace uni {
+namespace impl {
 
-template <typename CharType>
-size_t CalculateSequenceLength(uint32_t codepoint);
+template <typename CharT>
+static size_t calculate_sequence_length(uint32_t codepoint);
 
 template <>
-size_t CalculateSequenceLength<Utf8Char>(const uint32_t codepoint) {
+size_t calculate_sequence_length<u8char_t>(const uint32_t codepoint) {
   if (codepoint < 0x80) {
     return 1;
   }
@@ -31,13 +32,14 @@ size_t CalculateSequenceLength<Utf8Char>(const uint32_t codepoint) {
 }
 
 template <>
-size_t CalculateSequenceLength<Utf16Char>(const uint32_t codepoint) {
+size_t calculate_sequence_length<u16char_t>(const uint32_t codepoint) {
   if (codepoint <= 0xFFFF) {
     return 1;
   }
   return 2;
 }
 
+}  // namespace impl
 }  // namespace uni
 
 #endif  // UNICORE_UTILITY_LENGTH_CALCULATION_H_

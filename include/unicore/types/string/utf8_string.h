@@ -18,147 +18,145 @@
 namespace uni {
 
 template <>
-class UnicodeString<Char> {
+class unicode_string<char_t> {
 public:
-  using CharType = Char;
-  using BasicCharType = Char::CharType;
-  using StringType = std::basic_string<BasicCharType>;
-  using SizeType = size_t;
-  using Iterator = UnicodeStringIterator<Char>;
-  using ConstIterator = UnicodeStringConstIterator<Char>;
-  using DataType = std::vector<CharType>;
-
-public:
-  UnicodeString() = default;
-
-  UnicodeString(const BasicCharType* str) { FromChars(str); }
-
-  UnicodeString(const StringType& str) { FromChars(str); }
-
-  UnicodeString(const UnicodeString& other) : data_{other.data_} {}
-
-  UnicodeString(UnicodeString&& other) : data_{std::move(other.data_)} {}
+  using char_type = char_t;
+  using basic_char_type = char_t::char_type;
+  using basic_string_type = std::basic_string<basic_char_type>;
+  using size_type = size_t;
+  using data_type = std::vector<char_type>;
+  using iterator = unicode_string_iterator<char_t>;
+  using const_iterator = unicode_string_const_iterator<char_t>;
 
 public:
-  UnicodeString& operator=(const StringType& str) {
-    FromChars(str);
+  unicode_string() = default;
+
+  unicode_string(const basic_char_type* str) { from_chars(str); }
+
+  unicode_string(const basic_string_type& str) { from_chars(str); }
+
+  unicode_string(const unicode_string& other) : data_{other.data_} {}
+
+  unicode_string(unicode_string&& other) : data_{std::move(other.data_)} {}
+
+public:
+  unicode_string& operator=(const basic_string_type& str) {
+    from_chars(str);
     return *this;
   }
 
-  UnicodeString& operator=(const BasicCharType* str) {
-    FromChars(StringType{str});
+  unicode_string& operator=(const basic_char_type* str) {
+    from_chars(basic_string_type{str});
     return *this;
   }
 
-  UnicodeString& operator=(const UnicodeString& other) = default;
+  unicode_string& operator=(const unicode_string& other) = default;
 
-  UnicodeString& operator=(UnicodeString&& other) noexcept {
+  unicode_string& operator=(unicode_string&& other) noexcept {
     this->data_ = std::move(other.data_);
     return *this;
   }
 
 public:
-  [[nodiscard]] const CharType& operator[](const SizeType index) const {
-    return data_[index];
+  [[nodiscard]] const char_type& operator[](const size_type pos) const {
+    return data_[pos];
   }
 
-  [[nodiscard]] CharType& operator[](const SizeType index) {
-    return data_[index];
+  [[nodiscard]] char_type& operator[](const size_type pos) {
+    return data_[pos];
   }
 
-  UnicodeString& operator+=(const CharType& c) {
-    PushBack(c);
+  unicode_string& operator+=(const char_type& c) {
+    push_back(c);
     return *this;
   }
 
 public:
-  [[nodiscard]] Iterator begin() { return {data_.begin()}; }
+  [[nodiscard]] iterator begin() { return {data_.begin()}; }
 
-  [[nodiscard]] Iterator end() { return {data_.end()}; }
+  [[nodiscard]] iterator end() { return {data_.end()}; }
 
-  [[nodiscard]] ConstIterator begin() const { return data_.begin(); }
+  [[nodiscard]] const_iterator begin() const { return data_.begin(); }
 
-  [[nodiscard]] ConstIterator end() const { return data_.end(); }
+  [[nodiscard]] const_iterator end() const { return data_.end(); }
 
-  [[nodiscard]] ConstIterator cbegin() const { return data_.cbegin(); }
+  [[nodiscard]] const_iterator cbegin() const { return data_.cbegin(); }
 
-  [[nodiscard]] ConstIterator cend() const { return data_.cend(); }
+  [[nodiscard]] const_iterator cend() const { return data_.cend(); }
 
 public:
-  void Append(const CharType& value) { data_.push_back(value); }
+  void append(const char_type& value) { data_.push_back(value); }
 
-  void Append(const UnicodeString& other) {
+  void append(const unicode_string& other) {
     data_.insert(data_.end(), other.data_.begin(), other.data_.end());
   }
 
 public:
-  [[nodiscard]] std::basic_string<Utf8Char> ToStdString() const {
-    std::basic_ostringstream<Utf8Char> oss;
+  [[nodiscard]] std::string to_std_string() const {
+    std::basic_ostringstream<u8char_t> oss;
     for (const auto& c : data_) {
-      oss << ConvertToStdString(c.GetCodepoint());
+      oss << impl::char_to_std_string<u8char_t>(c.get_codepoint());
     }
     return oss.str();
   }
 
-  [[nodiscard]] std::basic_string<Utf16Char> ToU16String() const {
-    std::basic_ostringstream<Utf16Char> oss;
+  [[nodiscard]] std::u16string to_std_u16string() const {
+    std::basic_ostringstream<u16char_t> oss;
     for (const auto c : data_) {
-      oss << ConvertToStdU16String(c.GetCodepoint());
+      oss << impl::char_to_std_string<u16char_t>(c.get_codepoint());
     }
     return oss.str();
   }
 
-  [[nodiscard]] std::basic_string<Utf32Char> ToU32String() const {
-    std::basic_ostringstream<Utf32Char> oss;
+  [[nodiscard]] std::u32string to_std_u32string() const {
+    std::basic_ostringstream<u32char_t> oss;
     for (const auto& c : data_) {
-      oss << ConvertToStdU32String(c.GetCodepoint());
+      oss << impl::char_to_std_string<u32char_t>(c.get_codepoint());
     }
     return oss.str();
   }
 
 public:
-  [[nodiscard]] SizeType CharCount() const { return data_.size(); }
+  [[nodiscard]] size_type char_count() const { return data_.size(); }
 
-  [[nodiscard]] SizeType ByteCount() const {
-    SizeType byte_count{};
+  [[nodiscard]] size_type byte_count() const {
+    size_type byte_count{};
     for (const auto& c : data_) {
-      byte_count += c.CharCount();
+      byte_count += c.char_count();
     }
     return byte_count;
   }
 
 public:
-  [[nodiscard]] SizeType Size() const { return data_.size(); }
+  [[nodiscard]] size_type size() const { return data_.size(); }
 
-  [[nodiscard]] SizeType Length() const { return data_.size(); }
+  [[nodiscard]] size_type length() const { return data_.size(); }
 
-  [[nodiscard]] bool IsEmpty() const { return data_.empty(); }
+  [[nodiscard]] bool is_empty() const { return data_.empty(); }
 
-  void PushBack(const CharType& c) { data_.push_back(c); }
+  void push_back(const char_type& c) { data_.push_back(c); }
 
-  void PopBack() { data_.pop_back(); }
+  void pop_back() { data_.pop_back(); }
 
-  void Clear() { data_.clear(); }
+  void clear() { data_.clear(); }
 
 private:
-  void FromChars(const StringType& str) {
+  void from_chars(const basic_string_type& str) {
     const auto size = str.size();
 
-    for (SizeType pos = 0; pos < size;) {
+    for (size_type pos = 0; pos < size;) {
       if (pos >= size) {
         break;
       }
-      Char temp = str.substr(pos).c_str();
+      char_t temp = str.substr(pos).c_str();
       data_.push_back(temp);
-      pos += temp.CharCount();
+      pos += temp.char_count();
     }
   }
 
 private:
-  DataType data_;
+  data_type data_;
 };
-
-using String = UnicodeString<Char>;
 
 }  // namespace uni
 

@@ -8,50 +8,52 @@
 
 #include <tuple>
 
-#include "unicore/types/char/basic_char.h"
+#include "unicore/defs/sequence.h"
 
 namespace uni {
+namespace impl {
 
-using StdCharSequence = std::tuple<Utf8Char, Utf8Char, Utf8Char, Utf8Char>;
-using StdU16CharSequence = std::tuple<Utf16Char, Utf16Char>;
+template <typename CharT>
+static typename sequence_t<CharT>::type get_sequence(uint32_t codepoint);
 
-static StdCharSequence GetStdCharSequence(const uint32_t codepoint) {
-  const auto length = CalculateSequenceLength<Utf8Char>(codepoint);
+template <>
+sequence_t<u8char_t>::type get_sequence<u8char_t>(const uint32_t codepoint) {
+  const auto length = calculate_sequence_length<u8char_t>(codepoint);
   if (codepoint == 0) {
     return {};
   }
   if (length == 1) {
-    return std::make_tuple(static_cast<Utf8Char>(codepoint), 0x0, 0x0, 0x0);
+    return std::make_tuple(static_cast<u8char_t>(codepoint), 0x0, 0x0, 0x0);
   } else if (length == 2) {
-    return std::make_tuple(static_cast<Utf8Char>(0xC0 | (codepoint >> 6)),
-                           static_cast<Utf8Char>(0x80 | (codepoint & 0x3F)),
+    return std::make_tuple(static_cast<u8char_t>(0xC0 | (codepoint >> 6)),
+                           static_cast<u8char_t>(0x80 | (codepoint & 0x3F)),
                            0x0, 0x0);
   } else if (length == 3) {
     return std::make_tuple(
-        static_cast<Utf8Char>(0xE0 | (codepoint >> 12)),
-        static_cast<Utf8Char>(0x80 | ((codepoint >> 6) & 0x3F)),
-        static_cast<Utf8Char>(0x80 | (codepoint & 0x3F)), 0x0);
+        static_cast<u8char_t>(0xE0 | (codepoint >> 12)),
+        static_cast<u8char_t>(0x80 | ((codepoint >> 6) & 0x3F)),
+        static_cast<u8char_t>(0x80 | (codepoint & 0x3F)), 0x0);
   } else {
     return std::make_tuple(
-        static_cast<Utf8Char>(0xF0 | (codepoint >> 18)),
-        static_cast<Utf8Char>(0x80 | ((codepoint >> 12) & 0x3F)),
-        static_cast<Utf8Char>(0x80 | ((codepoint >> 6) & 0x3F)),
-        static_cast<Utf8Char>(0x80 | (codepoint & 0x3F)));
+        static_cast<u8char_t>(0xF0 | (codepoint >> 18)),
+        static_cast<u8char_t>(0x80 | ((codepoint >> 12) & 0x3F)),
+        static_cast<u8char_t>(0x80 | ((codepoint >> 6) & 0x3F)),
+        static_cast<u8char_t>(0x80 | (codepoint & 0x3F)));
   }
 }
 
-static StdU16CharSequence GetStdU16CharSequence(const uint32_t codepoint) {
+template <>
+sequence_t<u16char_t>::type get_sequence<u16char_t>(const uint32_t codepoint) {
   if (codepoint <= 0xFFFF) {
-    return std::make_tuple(static_cast<Utf16Char>(codepoint), 0x0);
+    return std::make_tuple(static_cast<u16char_t>(codepoint), 0x0);
   }
   const size_t current = codepoint - 0x10000;
-  auto high = static_cast<Utf16Char>((current >> 10) + 0xD800);
-  auto low = static_cast<Utf16Char>((current & 0x3FF) + 0xDC00);
+  auto high = static_cast<u16char_t>((current >> 10) + 0xD800);
+  auto low = static_cast<u16char_t>((current & 0x3FF) + 0xDC00);
   return std::make_tuple(high, low);
 }
 
-static Utf32Char GetStdU32Char(const uint32_t codepoint) { return codepoint; }
-
+}  // namespace impl
 }  // namespace uni
 
 #endif  // UNICORE_UTILITY_CHAR_SEQUENCE_CONVERTER_H_

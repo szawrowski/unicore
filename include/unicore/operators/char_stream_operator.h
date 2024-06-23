@@ -3,61 +3,27 @@
 // This file is distributed under the MIT License.
 // See LICENSE file for details.
 
-#ifndef UNICORE_OPERATORS_UTF8_CHAR_STREAM_OPERATOR_H_
-#define UNICORE_OPERATORS_UTF8_CHAR_STREAM_OPERATOR_H_
+#ifndef UNICORE_OPERATORS_CHAR_STREAM_OPERATOR_H_
+#define UNICORE_OPERATORS_CHAR_STREAM_OPERATOR_H_
 
+#include "unicore/types/char/unicode_char.h"
 #include "unicore/utility/char_utility.h"
 #include "unicore/utility/string_converter.h"
 
-static std::basic_istream<uni::Utf8Char>& operator>>(
-    std::basic_istream<uni::Utf8Char>& is, uni::Char& c) {
+static std::basic_istream<uni::u8char_t>& operator>>(
+    std::basic_istream<uni::u8char_t>& is, uni::char_t& c) {
   if (is.good()) {
-    c = uni::impl::ReadU8Char(is);
+    c = uni::impl::read_u8char(is);
   }
   return is;
 }
 
-static std::basic_ostream<uni::Utf8Char>& operator<<(
-    std::basic_ostream<uni::Utf8Char>& os, const uni::Char& c) {
+static std::basic_ostream<uni::u8char_t>& operator<<(
+    std::basic_ostream<uni::u8char_t>& os, const uni::char_t& c) {
   if (os.good()) {
-    os.write(uni::ConvertToStdString(c.GetCodepoint()).c_str(),
-             static_cast<std::streamsize>(c.CharCount()));
+    os << uni::impl::char_to_std_string<uni::u8char_t>(c.get_codepoint());
   }
   return os;
 }
 
-static std::basic_istream<uni::Utf16Char>& operator>>(
-    std::basic_istream<uni::Utf16Char>& is, uni::U16Char& c) {
-  if (is.good()) {
-    c = uni::impl::ReadU16Char(is);
-  }
-  return is;
-}
-
-static std::basic_ostream<uni::Utf8Char>& operator<<(
-    std::basic_ostream<uni::Utf8Char>& os, const uni::U16Char& c) {
-  if (os.good()) {
-    os.write(uni::ConvertToStdString(c.GetCodepoint()).c_str(),
-             static_cast<std::streamsize>(c.CharCount() * 2));
-  }
-  return os;
-}
-
-static std::basic_istream<uni::Utf32Char>& operator>>(
-    std::basic_istream<uni::Utf32Char>& is, uni::U32Char& c) {
-  if (is.good()) {
-    c = uni::impl::ReadU32Char(is);
-  }
-  return is;
-}
-
-static std::basic_ostream<uni::Utf8Char>& operator<<(
-    std::basic_ostream<uni::Utf8Char>& os, const uni::U32Char& c) {
-  if (os.good()) {
-    os.write(uni::ConvertToStdString(c.GetCodepoint()).c_str(),
-             static_cast<std::streamsize>(4));
-  }
-  return os;
-}
-
-#endif  // UNICORE_OPERATORS_UTF8_CHAR_STREAM_OPERATOR_H_
+#endif  // UNICORE_OPERATORS_CHAR_STREAM_OPERATOR_H_

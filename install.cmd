@@ -48,7 +48,7 @@ if not exist %config% (
   exit /b 1
 )
 
-@REM Read the config
+@REM read the config
 set "libs="
 for /f "tokens=*" %%a in (%config%) do (
   set "libs=!libs!%%a "

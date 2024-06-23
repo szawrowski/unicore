@@ -11,75 +11,76 @@
 
 namespace uni {
 
-template <typename CharType>
-class UnicodeStringConstIterator {
+template <typename CharT>
+class unicode_string_const_iterator {
 public:
   using iterator_category = std::random_access_iterator_tag;
-  using value_type = const CharType;
+  using value_type = const CharT;
   using difference_type = std::ptrdiff_t;
-  using pointer = const CharType*;
-  using reference = const CharType&;
+  using pointer = value_type*;
+  using reference = value_type&;
+  using iterator_data = typename std::vector<CharT>::const_iterator;
 
-  UnicodeStringConstIterator(typename std::vector<CharType>::const_iterator it)
+  unicode_string_const_iterator(iterator_data it)
       : it_(std::move(it)) {}
 
-  const CharType& operator*() const { return *it_; }
+  reference operator*() const { return *it_; }
 
-  UnicodeStringConstIterator& operator++() {
+  unicode_string_const_iterator& operator++() {
     ++it_;
     return *this;
   }
 
-  UnicodeStringConstIterator operator++(int) {
-    UnicodeStringConstIterator temp = *this;
+  unicode_string_const_iterator operator++(int) {
+    unicode_string_const_iterator temp = *this;
     ++(*this);
     return temp;
   }
 
-  UnicodeStringConstIterator& operator--() {
+  unicode_string_const_iterator& operator--() {
     --it_;
     return *this;
   }
 
-  UnicodeStringConstIterator operator--(int) {
-    UnicodeStringConstIterator temp = *this;
+  unicode_string_const_iterator operator--(int) {
+    unicode_string_const_iterator temp = *this;
     --(*this);
     return temp;
   }
 
-  UnicodeStringConstIterator operator+(difference_type n) const {
+  unicode_string_const_iterator operator+(difference_type n) const {
     return {it_ + n};
   }
 
-  UnicodeStringConstIterator& operator+=(difference_type n) {
+  unicode_string_const_iterator& operator+=(difference_type n) {
     it_ += n;
     return *this;
   }
 
-  UnicodeStringConstIterator operator-(difference_type n) const {
+  unicode_string_const_iterator operator-(difference_type n) const {
     return {it_ - n};
   }
 
-  UnicodeStringConstIterator& operator-=(difference_type n) {
+  unicode_string_const_iterator& operator-=(difference_type n) {
     it_ -= n;
     return *this;
   }
 
-  difference_type operator-(const UnicodeStringConstIterator& rhs) const {
+  difference_type operator-(const unicode_string_const_iterator& rhs) const {
     return std::distance(rhs.it_, it_);
   }
 
-  const CharType& operator[](difference_type n) const { return *(it_ + n); }
+  reference operator[](difference_type n) const { return *(it_ + n); }
 
-  bool operator==(const UnicodeStringConstIterator& rhs) const {
+  bool operator==(const unicode_string_const_iterator& rhs) const {
     return it_ == rhs.it_;
   }
-  bool operator!=(const UnicodeStringConstIterator& rhs) const {
+  bool operator!=(const unicode_string_const_iterator& rhs) const {
     return !(*this == rhs);
   }
 
 private:
-  typename std::vector<CharType>::const_iterator it_;
+  iterator_data it_;
 };
 
 }  // namespace uni

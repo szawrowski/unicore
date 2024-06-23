@@ -11,55 +11,56 @@
 #include <tuple>
 #include <utility>
 
-#include "unicore/types/char/basic_char.h"
+#include "unicore/defs/basic_char.h"
+#include "unicore/defs/unicode_type.h"
 #include "unicore/types/char/unicode_char.h"
 #include "unicore/utility/length_calculation.h"
 
 namespace uni {
 
 template <>
-class UnicodeChar<Utf8Char> {
+class unicode_char<u8char_t> {
 public:
-  using CharType = Utf8Char;
-  using StringType = std::basic_string<CharType>;
-  using CodepointType = uint32_t;
-  using SizeType = size_t;
-
-public:
-  UnicodeChar() = default;
-
-  UnicodeChar(const CharType* symbol) { FromChars(symbol); }
-
-  UnicodeChar(const StringType& symbol) { FromChars(symbol); }
-
-  UnicodeChar(const CodepointType codepoint) : codepoint_{codepoint} {}
+  using char_type = u8char_t;
+  using string_type = std::basic_string<char_type>;
+  using codepoint_type = codepoint_t;
+  using size_type = size_t;
 
 public:
-  UnicodeChar& operator=(const CharType* str) {
-    FromChars(str);
+  unicode_char() = default;
+
+  unicode_char(const char_type* symbol) { from_chars(symbol); }
+
+  unicode_char(const string_type& symbol) { from_chars(symbol); }
+
+  unicode_char(const codepoint_type codepoint) : codepoint_{codepoint} {}
+
+public:
+  unicode_char& operator=(const char_type* str) {
+    from_chars(str);
     return *this;
   }
 
-  UnicodeChar& operator=(const StringType& str) {
-    FromChars(str);
+  unicode_char& operator=(const string_type& str) {
+    from_chars(str);
     return *this;
   }
 
-  UnicodeChar& operator=(const CodepointType codepoint) {
+  unicode_char& operator=(const codepoint_type codepoint) {
     codepoint_ = codepoint;
-    CalculateSequenceLength<CharType>(codepoint);
+    impl::calculate_sequence_length<char_type>(codepoint);
     return *this;
   }
 
 public:
-  [[nodiscard]] CodepointType GetCodepoint() const { return codepoint_; }
+  [[nodiscard]] codepoint_type get_codepoint() const { return codepoint_; }
 
-  [[nodiscard]] SizeType CharCount() const {
-    return CalculateSequenceLength<CharType>(codepoint_);
+  [[nodiscard]] size_type char_count() const {
+    return impl::calculate_sequence_length<char_type>(codepoint_);
   }
 
 private:
-  void FromChars(const StringType& str) {
+  void from_chars(const string_type& str) {
     const auto lead = static_cast<unsigned char>(str[0]);
     if ((lead & 0x80) == 0) {
       codepoint_ = lead;
@@ -81,10 +82,8 @@ private:
   }
 
 private:
-  CodepointType codepoint_{};
+  codepoint_type codepoint_{};
 };
-
-using Char = UnicodeChar<Utf8Char>;
 
 }  // namespace uni
 

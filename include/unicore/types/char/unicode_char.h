@@ -6,10 +6,14 @@
 #ifndef UNICORE_TYPES_UNICODE_CHAR_H_
 #define UNICORE_TYPES_UNICODE_CHAR_H_
 
+#include "unicore/defs/basic_char.h"
+
 namespace uni {
 
-template <typename CharType>
-class UnicodeChar;
+template <typename CharT>
+class unicode_char;
+
+using char_t = unicode_char<u8char_t>;
 
 }  // namespace uni
 

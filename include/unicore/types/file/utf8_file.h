@@ -8,6 +8,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
 #include <utility>
 
 #include "unicore/operators/string_stream_operator.h"
@@ -17,122 +18,169 @@
 namespace uni {
 
 template <>
-class UnicodeFile<Char> {
+class unicode_file<char_t> {
 public:
-  using CharType = Char::CharType;
-  using StringType = std::basic_string<CharType>;
-  using InputFileStream = std::basic_ifstream<CharType>;
-  using OutputFileStream = std::basic_ofstream<CharType>;
-  using OutputStringStream = std::basic_ostringstream<CharType>;
+  using char_type = char_t;
+  using basic_char_type = char_type::char_type;
+  using basic_string_type = std::basic_string<basic_char_type>;
+  using file_stream_type = std::basic_fstream<basic_char_type>;
+  using string_type = string;
 
-public:
-  UnicodeFile(const String& filename) : filename_{filename} {}
+  unicode_file() = default;
 
-  UnicodeFile(const UnicodeFile& other) : filename_{other.filename_} {}
+  explicit unicode_file(const string_type& filename)
+      : filename_(filename.to_std_string()) {
+    open();
+  }
 
-  UnicodeFile(UnicodeFile&& other) noexcept
-      : filename_{std::move(other.filename_)} {}
+  unicode_file(const unicode_file& other) : filename_(other.filename_) {
+    open();
+  }
 
-public:
-  UnicodeFile& operator=(const UnicodeFile& other) {
+  unicode_file(unicode_file&& other) noexcept
+      : filename_(std::move(other.filename_)), file_(std::move(other.file_)) {}
+
+  ~unicode_file() { close(); }
+
+  unicode_file& operator=(const unicode_file& other) {
     if (this != &other) {
+      close();
       filename_ = other.filename_;
+      open();
     }
     return *this;
   }
 
-  UnicodeFile& operator=(UnicodeFile&& other) noexcept {
+  unicode_file& operator=(unicode_file&& other) noexcept {
     if (this != &other) {
+      close();
       filename_ = std::move(other.filename_);
+      file_ = std::move(other.file_);
     }
     return *this;
   }
 
-public:
-  void SetFilename(const String& filename) { filename_ = filename; }
-
-  [[nodiscard]] bool Exists() const {
-    return std::filesystem::exists(GetFilename());
+  void set_filename(const string_type& filename) {
+    close();
+    filename_ = filename.to_std_string();
+    open();
   }
 
-  [[nodiscard]] std::uintmax_t GetSize() const {
-    return std::filesystem::file_size(GetFilename());
+  [[nodiscard]] bool exists() const {
+    return std::filesystem::exists(filename_);
   }
 
-  void CopyTo(const String& dest) const {
-    std::filesystem::copy(GetFilename(), dest.ToStdString(),
+  [[nodiscard]] std::uintmax_t get_size() const {
+    return std::filesystem::file_size(filename_);
+  }
+
+  void copy_to(const string_type& dest) const {
+    std::filesystem::copy(filename_, dest.to_std_string(),
                           std::filesystem::copy_options::overwrite_existing);
   }
 
-  void MoveTo(const String& dest) {
-    std::filesystem::rename(GetFilename(), dest.ToStdString());
-    filename_ = dest;
+  void move_to(const string_type& dest) {
+    std::filesystem::rename(filename_, dest.to_std_string());
+    filename_ = dest.to_std_string();
+    open();
   }
 
-  void Write(const String& data) const {
-    OutputFileStream file(GetFilename(), std::ios::out | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for writing");
+  void write(const string_type& data) {
+    if (!file_.is_open() || !file_.good()) {
+      open(std::ios::out | std::ios::binary);
     }
-    file << data;
+    file_.seekp(0, std::ios::beg);
+    file_.write(data.to_std_string().c_str(),
+                static_cast<std::streamsize>(data.size()));
+    file_.flush();
   }
 
-  void WriteLine(const String& data) const {
-    OutputFileStream file(GetFilename(),
-                          std::ios::out | std::ios::app | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for appending");
+  void write_line(const string_type& data) {
+    if (!file_.is_open() || !file_.good()) {
+      open(std::ios::out | std::ios::app | std::ios::binary);
     }
-    file << data << '\n';
+    file_.seekp(0, std::ios::end);
+    file_.write(data.to_std_string().c_str(),
+                static_cast<std::streamsize>(data.size()));
+    file_.put('\n');
+    file_.flush();
   }
 
-  [[nodiscard]] String Read() const {
-    const InputFileStream file(GetFilename(), std::ios::in | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for reading");
+  [[nodiscard]] string_type read() {
+    if (!file_.is_open() || !file_.good()) {
+      open(std::ios::in | std::ios::binary);
     }
-    OutputStringStream oss;
-    oss << file.rdbuf();
+    file_.seekg(0, std::ios::beg);
+    std::basic_ostringstream<basic_char_type> oss;
+    oss << file_.rdbuf();
     return oss.str();
   }
 
-  [[nodiscard]] String ReadLine() const {
-    InputFileStream file(GetFilename(), std::ios::in | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for reading");
+  [[nodiscard]] string_type read_line() {
+    if (!file_.is_open() || !file_.good()) {
+      open(std::ios::in | std::ios::binary);
     }
-    StringType line;
-    std::getline(file, line, '\n');
+    basic_string_type line;
+    std::getline(file_, line);
     return line;
   }
 
-  void Append(const String& data) const {
-    OutputFileStream file(GetFilename(),
-                          std::ios::out | std::ios::app | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for appending");
+  void append(const string_type& data) {
+    if (!file_.is_open() || !file_.good()) {
+      open(std::ios::out | std::ios::app | std::ios::binary);
     }
-    file << data;
+    file_.seekp(0, std::ios::end);
+    file_.write(data.to_std_string().c_str(),
+                static_cast<std::streamsize>(data.size()));
+    file_.flush();
   }
 
-  void Clear() const {
-    const OutputFileStream file(
-        GetFilename(), std::ios::out | std::ios::trunc | std::ios::binary);
-    if (!file) {
-      throw std::ios_base::failure("Failed to open file for clearing");
+  void clear() {
+    if (file_.is_open()) {
+      file_.close();
     }
+    std::ofstream clear_file(
+        filename_, std::ios::out | std::ios::trunc | std::ios::binary);
+    if (!clear_file) {
+      throw std::ios_base::failure{"Failed to open file for clearing"};
+    }
+    clear_file.close();
+    open();
+  }
+
+  void set_position(const std::streampos pos) {
+    if (!file_.is_open()) {
+      throw std::ios_base::failure{"File not open"};
+    }
+    file_.seekg(pos);
+  }
+
+  void reset_position() {
+    if (!file_.is_open()) {
+      throw std::ios_base::failure{"File not open"};
+    }
+    file_.seekg(0, std::ios::beg);
   }
 
 private:
-  [[nodiscard]] StringType GetFilename() const {
-    return filename_.ToStdString();
+  void open(std::ios::openmode mode = std::ios::in | std::ios::out |
+                                      std::ios::binary) {
+    close();
+    file_.open(filename_, mode);
+    if (!file_) {
+      throw std::ios_base::failure{"Failed to open file"};
+    }
   }
 
-private:
-  String filename_{};
+  void close() {
+    if (file_.is_open()) {
+      file_.close();
+    }
+  }
+
+  basic_string_type filename_;
+  mutable file_stream_type file_;
 };
-
-using File = UnicodeFile<Char>;
 
 }  // namespace uni
 
