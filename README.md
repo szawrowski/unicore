@@ -2,11 +2,11 @@
 
 ### Usage
 ```c++
-#include <uni/uni.h>
+#include <unicore/unicore.h>
 
 int main() {
-  uni::String str = "Hello, 世界!";
-  uni::Char emoji = "🙂";
+  const auto str = "Hello, 世界!"_str;
+  const auto emoji = "🙂"_char;
   std::cout << str << ' ' << emoji << std::endl;
   return 0;
 }
