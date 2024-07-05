@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include <gtest/gtest.h>
+
 #include "unicore/unicore.h"
 
 void func() {
@@ -31,26 +33,6 @@ void func() {
 
   std::cout << "Symbol: " << emoji << " (codepoint: " << std::hex
             << emoji.get_codepoint() << std::dec << ')' << std::endl;
-
-  // File ----------------------------------------------------------------------
-
-  const auto first_line = "First line"_str;
-  const auto second_line = "Second line"_str;
-
-  auto file = uni::file{"example.txt"};
-  file.clear();
-  file.write_line(first_line);
-  file.write_line(second_line);
-  file.reset_position();
-
-  auto line = file.read_line();
-  std::cout << "First line: " << line << std::endl;
-  line = file.read_line();
-  std::cout << "Second line: " << line << std::endl;
-
-  file.reset_position();
-  const auto all = file.read();
-  std::cout << "All content: '" << all << '\'' << std::endl;
 }
 
 TEST(UnicoreTest, Sample) {
