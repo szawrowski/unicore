@@ -10,7 +10,7 @@
 
 #include "unicore/defs/sequence.h"
 
-namespace uni {
+namespace cait {
 namespace impl {
 
 template <typename CharT>
@@ -54,6 +54,6 @@ sequence_t<u16char_t>::type get_sequence<u16char_t>(const uint32_t codepoint) {
 }
 
 }  // namespace impl
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_UTILITY_CHAR_SEQUENCE_CONVERTER_H_

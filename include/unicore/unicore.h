@@ -11,7 +11,6 @@
 #include "unicore/operators/string_comparison_operator.h"
 #include "unicore/operators/string_literal_operator.h"
 #include "unicore/operators/string_stream_operator.h"
-#include "unicore/types/file/utf8_file.h"
 #include "unicore/types/string/utf8_string.h"
 
 #endif  // UNICORE_UNICORE_H_

@@ -8,8 +8,8 @@
 
 #include "unicore/types/string/utf8_string.h"
 
-static std::basic_istream<uni::u8char_t>& operator>>(
-    std::basic_istream<uni::u8char_t>& is, uni::string& str) {
+static std::basic_istream<cait::u8char_t>& operator>>(
+    std::basic_istream<cait::u8char_t>& is, cait::string& str) {
   if (is.good()) {
     std::string input;
     std::getline(is, input);
@@ -18,8 +18,8 @@ static std::basic_istream<uni::u8char_t>& operator>>(
   return is;
 }
 
-static std::basic_ostream<uni::u8char_t>& operator<<(
-    std::basic_ostream<uni::u8char_t>& os, const uni::string& str) {
+static std::basic_ostream<cait::u8char_t>& operator<<(
+    std::basic_ostream<cait::u8char_t>& os, const cait::string& str) {
   if (os.good()) {
     os << str.to_std_string();
   }

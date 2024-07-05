@@ -8,11 +8,11 @@
 
 #include "unicore/types/char/utf8_char.h"
 
-static bool operator==(const uni::char_t lhs, const uni::char_t rhs) {
+static bool operator==(const cait::char_t lhs, const cait::char_t rhs) {
   return lhs.get_codepoint() == rhs.get_codepoint();
 }
 
-static bool operator!=(const uni::char_t lhs, const uni::char_t rhs) {
+static bool operator!=(const cait::char_t lhs, const cait::char_t rhs) {
   return !(lhs == rhs);
 }
 

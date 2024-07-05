@@ -11,7 +11,7 @@
 
 #include "unicore/defs/basic_char.h"
 
-namespace uni {
+namespace cait {
 namespace impl {
 
 template <typename CharT>
@@ -40,6 +40,6 @@ size_t calculate_sequence_length<u16char_t>(const uint32_t codepoint) {
 }
 
 }  // namespace impl
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_UTILITY_LENGTH_CALCULATION_H_

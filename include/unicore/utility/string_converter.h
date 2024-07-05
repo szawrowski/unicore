@@ -10,7 +10,7 @@
 
 #include "unicore/utility/char_sequence_converter.h"
 
-namespace uni {
+namespace cait {
 namespace impl {
 
 template <typename CharT>
@@ -51,6 +51,6 @@ std::basic_string<u32char_t> char_to_std_string(uint32_t codepoint) {
 }
 
 }  // namespace impl
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_UTILITY_STRING_CONVERTER_H_

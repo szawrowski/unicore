@@ -8,13 +8,13 @@
 
 #include "unicore/defs/basic_char.h"
 
-namespace uni {
+namespace cait {
 
 template <typename CharT>
 class unicode_char;
 
 using char_t = unicode_char<u8char_t>;
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_TYPES_UNICODE_CHAR_H_

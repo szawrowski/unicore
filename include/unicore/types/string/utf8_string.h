@@ -15,7 +15,7 @@
 #include "unicore/types/string/unicode_string.h"
 #include "unicore/utility/string_converter.h"
 
-namespace uni {
+namespace cait {
 
 template <>
 class unicode_string<char_t> {
@@ -158,6 +158,6 @@ private:
   data_type data_;
 };
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_TYPES_UTF8_STRING_H_

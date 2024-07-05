@@ -8,7 +8,7 @@
 
 #include <istream>
 
-namespace uni {
+namespace cait {
 namespace impl {
 
 static char_t read_u8char(std::basic_istream<u8char_t>& is) {
@@ -38,6 +38,6 @@ static char_t read_u8char(std::basic_istream<u8char_t>& is) {
 }
 
 }  // namespace impl
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_UTILITY_CHAR_UTILITY_H_

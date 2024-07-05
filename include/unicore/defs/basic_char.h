@@ -6,12 +6,12 @@
 #ifndef UNICORE_DEFS_BASIC_CHAR_H_
 #define UNICORE_DEFS_BASIC_CHAR_H_
 
-namespace uni {
+namespace cait {
 
 using u8char_t = char;
 using u16char_t = char16_t;
 using u32char_t = char32_t;
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_DEFS_BASIC_CHAR_H_

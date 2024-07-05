@@ -10,18 +10,18 @@
 #include "unicore/utility/char_utility.h"
 #include "unicore/utility/string_converter.h"
 
-static std::basic_istream<uni::u8char_t>& operator>>(
-    std::basic_istream<uni::u8char_t>& is, uni::char_t& c) {
+static std::basic_istream<cait::u8char_t>& operator>>(
+    std::basic_istream<cait::u8char_t>& is, cait::char_t& c) {
   if (is.good()) {
-    c = uni::impl::read_u8char(is);
+    c = cait::impl::read_u8char(is);
   }
   return is;
 }
 
-static std::basic_ostream<uni::u8char_t>& operator<<(
-    std::basic_ostream<uni::u8char_t>& os, const uni::char_t& c) {
+static std::basic_ostream<cait::u8char_t>& operator<<(
+    std::basic_ostream<cait::u8char_t>& os, const cait::char_t& c) {
   if (os.good()) {
-    os << uni::impl::char_to_std_string<uni::u8char_t>(c.get_codepoint());
+    os << cait::impl::char_to_std_string<cait::u8char_t>(c.get_codepoint());
   }
   return os;
 }

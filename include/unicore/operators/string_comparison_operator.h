@@ -9,7 +9,7 @@
 #include "unicore/operators/char_comparison_operator.h"
 #include "unicore/types/string/utf8_string.h"
 
-static bool operator==(const uni::string& lhs, const uni::string& rhs) {
+static bool operator==(const cait::string& lhs, const cait::string& rhs) {
   for (auto lhs_it = lhs.begin(), lhs_end = lhs.end(), rhs_it = rhs.begin(),
             rhs_end = rhs.end();
        lhs_it != lhs_end && rhs_it != rhs_end; ++lhs_it, ++rhs_it) {
@@ -20,9 +20,8 @@ static bool operator==(const uni::string& lhs, const uni::string& rhs) {
   return true;
 }
 
-static bool operator!=(const uni::string& lhs, const uni::string& rhs) {
+static bool operator!=(const cait::string& lhs, const cait::string& rhs) {
   return !(lhs == rhs);
 }
-
 
 #endif  // UNICORE_OPERATORS_STRING_COMPARISON_OPERATOR_H_

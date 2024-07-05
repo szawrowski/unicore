@@ -9,7 +9,7 @@
 #include <iterator>
 #include <vector>
 
-namespace uni {
+namespace cait {
 
 template <typename CharT>
 class unicode_string_const_iterator {
@@ -83,6 +83,6 @@ private:
   iterator_data it_;
 };
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_ITERATORS_UNICODE_STRING_CONST_ITERATOR_H_

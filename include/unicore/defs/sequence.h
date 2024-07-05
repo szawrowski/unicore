@@ -8,7 +8,7 @@
 
 #include "unicore/defs/basic_char.h"
 
-namespace uni {
+namespace cait {
 
 template <typename CharT>
 class sequence_t;
@@ -25,6 +25,6 @@ public:
   using type = std::tuple<u16char_t, u16char_t>;
 };
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_DEFS_SEQUENCE_TYPE_H_

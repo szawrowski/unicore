@@ -6,17 +6,14 @@
 #ifndef UNICORE_TYPES_UTF8_CHAR_H_
 #define UNICORE_TYPES_UTF8_CHAR_H_
 
-#include <cstdint>
 #include <string>
-#include <tuple>
-#include <utility>
 
 #include "unicore/defs/basic_char.h"
 #include "unicore/defs/unicode_type.h"
 #include "unicore/types/char/unicode_char.h"
 #include "unicore/utility/length_calculation.h"
 
-namespace uni {
+namespace cait {
 
 template <>
 class unicode_char<u8char_t> {
@@ -85,6 +82,6 @@ private:
   codepoint_type codepoint_{};
 };
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_TYPES_UTF8_CHAR_H_

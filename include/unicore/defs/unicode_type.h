@@ -8,11 +8,11 @@
 
 #include <cstdint>
 
-namespace uni {
+namespace cait {
 
 using codepoint_t = uint32_t;
 
-}  // namespace uni
+}  // namespace cait
 
 #endif  // UNICORE_DEFS_UNICODE_TYPE_H_
 
